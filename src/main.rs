@@ -57,6 +57,25 @@ fn remove_packages(package_names: &[String]) {
     }
 }
 
+fn auto_remove() {
+    let status = Command::new("sudo").arg("dnf").arg("autoremove").status();
+
+    match status {
+        Ok(exit_status) if exit_status.success() => {
+            println!("\nPackages auto removed successfully");
+        }
+        Ok(exit_status) if exit_status.code() == Some(1) => {
+            println!("\nOperation canceled by the user.");
+        }
+        Ok(_) => {
+            println!("\nError auto removing packages");
+        }
+        Err(e) => {
+            println!("\nFailed to execute command: {}", e);
+        }
+    }
+}
+
 fn update_system() {
     let status = Command::new("sudo").arg("dnf").arg("update").status();
 
@@ -124,6 +143,9 @@ fn get_help() {
     remove - Remove a package
     Ex: pkg remove git
 
+    autoremove - Auto remove unused packages
+    Ex: pkg autoremove
+
     update - Updates the system
     Ex: pkg update
 
@@ -146,6 +168,7 @@ fn main() {
         Some(command) => match command.as_str() {
             "install" => install_packages(&args[2..]),
             "remove" => remove_packages(&args[2..]),
+            "autoremove" => auto_remove(),
             "update" => update_system(),
             "list" => list_installed(),
             "search" => search_package(args.get(2)),
