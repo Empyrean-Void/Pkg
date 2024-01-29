@@ -46,9 +46,9 @@ fn remove_package(package_name: Option<&String>) {
                 .expect("Failed to execute command");
 
             if status.success() {
-                println!("\nPackage {} installed successfully", name);
+                println!("\nPackage {} removed successfully", name);
             } else {
-                println!("\nError installing package {}", name);
+                println!("\nError removing package {}", name);
             }
         }
         None => println!("Package name not provided for install"),
