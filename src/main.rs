@@ -1,57 +1,78 @@
 use std::env;
 use std::process::Command;
 
-fn install_package(package_name: Option<&String>) {
-    match package_name {
-        Some(name) => {
-            let status = Command::new("sudo")
-                .arg("dnf")
-                .arg("install")
-                .arg(name)
-                .status()
-                .expect("Failed to execute command");
+fn install_packages(package_names: &[String]) {
+    if package_names.is_empty() {
+        println!("No package names provided for install");
+        return;
+    }
 
-            if status.success() {
-                println!("\nPackage {} installed successfully", name);
-            } else {
-                println!("\nError installing package {}", name);
-            }
+    let status = Command::new("sudo")
+        .arg("dnf")
+        .arg("install")
+        .args(package_names)
+        .status();
+
+    match status {
+        Ok(exit_status) if exit_status.success() => {
+            println!("\nPackages installed successfully");
         }
-        None => println!("Package name not provided for install"),
+        Ok(exit_status) if exit_status.code() == Some(1) => {
+            println!("\nOperation canceled by the user.");
+        }
+        Ok(_) => {
+            println!("\nError installing packages");
+        }
+        Err(e) => {
+            println!("\nFailed to execute command: {}", e);
+        }
+    }
+}
+
+fn remove_packages(package_names: &[String]) {
+    if package_names.is_empty() {
+        println!("No package names provided for removal");
+        return;
+    }
+
+    let status = Command::new("sudo")
+        .arg("dnf")
+        .arg("remove")
+        .args(package_names)
+        .status();
+
+    match status {
+        Ok(exit_status) if exit_status.success() => {
+            println!("\nPackages removed successfully");
+        }
+        Ok(exit_status) if exit_status.code() == Some(1) => {
+            println!("\nOperation canceled by the user.");
+        }
+        Ok(_) => {
+            println!("\nError removing packages");
+        }
+        Err(e) => {
+            println!("\nFailed to execute command: {}", e);
+        }
     }
 }
 
 fn update_system() {
-    let status = Command::new("sudo")
-        .arg("dnf")
-        .arg("update")
-        .status()
-        .expect("Failed to execute command");
+    let status = Command::new("sudo").arg("dnf").arg("update").status();
 
-    if status.success() {
-        println!("\nSystem updated successfully");
-    } else {
-        println!("\nError updating the system");
-    }
-}
-
-fn remove_package(package_name: Option<&String>) {
-    match package_name {
-        Some(name) => {
-            let status = Command::new("sudo")
-                .arg("dnf")
-                .arg("remove")
-                .arg(name)
-                .status()
-                .expect("Failed to execute command");
-
-            if status.success() {
-                println!("\nPackage {} removed successfully", name);
-            } else {
-                println!("\nError removing package {}", name);
-            }
+    match status {
+        Ok(exit_status) if exit_status.success() => {
+            println!("\nSystem updated successfully");
         }
-        None => println!("Package name not provided for install"),
+        Ok(exit_status) if exit_status.code() == Some(1) => {
+            println!("\nOperation canceled by the user.");
+        }
+        Ok(_) => {
+            println!("\nError updating the system");
+        }
+        Err(e) => {
+            println!("\nFailed to execute command: {}", e);
+        }
     }
 }
 
@@ -79,9 +100,9 @@ fn search_package(package_name: Option<&String>) {
                 .expect("Failed to execute command");
 
             if status.success() {
-                println!("\nPackage {} searched successfully", name);
+                println!("\nPackage searched successfully");
             } else {
-                println!("\nError searching package {}", name);
+                println!("\nError searching package");
             }
         }
         None => println!("Package name not provided for install"),
@@ -123,9 +144,9 @@ fn main() {
 
     match args.get(1) {
         Some(command) => match command.as_str() {
-            "install" => install_package(args.get(2)),
+            "install" => install_packages(&args[2..]),
+            "remove" => remove_packages(&args[2..]),
             "update" => update_system(),
-            "remove" => remove_package(args.get(2)),
             "list" => list_installed(),
             "search" => search_package(args.get(2)),
             "help" => get_help(),
