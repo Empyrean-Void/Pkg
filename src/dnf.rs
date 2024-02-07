@@ -79,14 +79,14 @@ pub fn check_update() {
     let status = Command::new("dnf").arg("check-update").status();
 
     match status {
-        Ok(exit_status) if exit_status.success() => {
-            println!("\nChecked for updates successfully");
-        }
+        // Ok(exit_status) if exit_status.success() => {
+        // println!("\nChecked for updates successfully");
+        // }
         Ok(exit_status) if exit_status.code() == Some(1) => {
             println!("\nOperation canceled by the user.");
         }
         Ok(_) => {
-            println!("\nError checking for updates.");
+            println!("\nChecked for updates successfully");
         }
         Err(e) => {
             println!("\nFailed to execute command: {}", e);
@@ -113,6 +113,29 @@ pub fn update_system() {
     }
 }
 
+pub fn downgrade_packages(package_names: &[String]) {
+    let status = Command::new("sudo").arg("dnf").arg("downgrade").status();
+
+    if package_names.is_empty() {
+        println!("No packages provided for downgrade.")
+    }
+
+    match status {
+        Ok(exit_status) if exit_status.success() => {
+            println!("\nPackages downgraded successfully");
+        }
+        Ok(exit_status) if exit_status.code() == Some(1) => {
+            println!("\nOperation canceled by the user.");
+        }
+        Ok(_) => {
+            println!("\nError downgrading packages");
+        }
+        Err(e) => {
+            println!("\nFailed to execute command: {}", e);
+        }
+    }
+}
+
 pub fn list_installed() {
     let status = Command::new("dnf")
         .arg("list")
@@ -127,21 +150,25 @@ pub fn list_installed() {
     }
 }
 
-pub fn search_package(package_name: Option<&String>) {
-    match package_name {
-        Some(name) => {
-            let status = Command::new("dnf")
-                .arg("search")
-                .arg(name)
-                .status()
-                .expect("Failed to execute command");
+pub fn search_package(package_name: &String) {
+    let status = Command::new("dnf").arg("search").arg(package_name).status();
 
-            if status.success() {
-                println!("\nPackage searched successfully");
-            } else {
-                println!("\nError searching package");
-            }
+    if package_name.is_empty() {
+        println!("No package provided for search");
+    }
+
+    match status {
+        Ok(exit_status) if exit_status.success() => {
+            println!("\nPackages searched successfully");
         }
-        None => println!("Package name not provided for install"),
+        Ok(exit_status) if exit_status.code() == Some(1) => {
+            println!("\nOperation canceled by the user.");
+        }
+        Ok(_) => {
+            println!("\nError searching packages");
+        }
+        Err(e) => {
+            println!("\nFailed to execute command: {}", e);
+        }
     }
 }
