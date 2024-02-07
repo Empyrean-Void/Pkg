@@ -17,7 +17,7 @@ pub fn install_packages(package_names: &[String]) {
             println!("\nPackages installed successfully");
         }
         Ok(exit_status) if exit_status.code() == Some(1) => {
-            println!("\nOperation canceled by the user.");
+            println!("\nOperation canceled by the user");
         }
         Ok(_) => {
             println!("\nError installing packages");
@@ -45,7 +45,7 @@ pub fn remove_packages(package_names: &[String]) {
             println!("\nPackages removed successfully");
         }
         Ok(exit_status) if exit_status.code() == Some(1) => {
-            println!("\nOperation canceled by the user.");
+            println!("\nOperation canceled by the user");
         }
         Ok(_) => {
             println!("\nError removing packages");
@@ -64,7 +64,7 @@ pub fn auto_remove() {
             println!("\nPackages auto removed successfully");
         }
         Ok(exit_status) if exit_status.code() == Some(1) => {
-            println!("\nOperation canceled by the user.");
+            println!("\nOperation canceled by the user");
         }
         Ok(_) => {
             println!("\nError auto removing packages");
@@ -83,7 +83,7 @@ pub fn check_update() {
         // println!("\nChecked for updates successfully");
         // }
         Ok(exit_status) if exit_status.code() == Some(1) => {
-            println!("\nOperation canceled by the user.");
+            println!("\nOperation canceled by the user");
         }
         Ok(_) => {
             println!("\nChecked for updates successfully");
@@ -102,7 +102,7 @@ pub fn update_system() {
             println!("\nSystem updated successfully");
         }
         Ok(exit_status) if exit_status.code() == Some(1) => {
-            println!("\nOperation canceled by the user.");
+            println!("\nOperation canceled by the user");
         }
         Ok(_) => {
             println!("\nError updating the system");
@@ -125,7 +125,7 @@ pub fn downgrade_packages(package_names: &[String]) {
             println!("\nPackages downgraded successfully");
         }
         Ok(exit_status) if exit_status.code() == Some(1) => {
-            println!("\nOperation canceled by the user.");
+            println!("\nOperation canceled by the user");
         }
         Ok(_) => {
             println!("\nError downgrading packages");
@@ -159,13 +159,13 @@ pub fn search_package(package_name: &String) {
 
     match status {
         Ok(exit_status) if exit_status.success() => {
-            println!("\nPackages searched successfully");
+            println!("\nPackage searched successfully");
         }
         Ok(exit_status) if exit_status.code() == Some(1) => {
-            println!("\nOperation canceled by the user.");
+            println!("\nOperation canceled by the user");
         }
         Ok(_) => {
-            println!("\nError searching packages");
+            println!("\nError searching package: {}", package_name);
         }
         Err(e) => {
             println!("\nFailed to execute command: {}", e);

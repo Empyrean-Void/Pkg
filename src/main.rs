@@ -1,3 +1,4 @@
+use copr::{copr_disable, copr_enable};
 use dnf::{
     auto_remove, check_update, downgrade_packages, install_packages, list_installed,
     remove_packages, search_package, update_system,
@@ -5,6 +6,7 @@ use dnf::{
 use flatpak::{flat_install, flat_remove, flat_update};
 use std::env;
 
+mod copr;
 mod dnf;
 mod flatpak;
 
@@ -47,6 +49,10 @@ fn get_help() {
     search - Search for a package
     Ex: pkg search git
 
+    copr-enable - Enable a COPR repositoy
+
+    copr-disable - Disable a COPR repositoy
+
     help - Display this message
     Ex: pkg help
     "
@@ -69,6 +75,8 @@ fn main() {
             "downgrade" => downgrade_packages(&args[2..]),
             "list" => list_installed(),
             "search" => search_package(&args[2]),
+            "copr-enable" => copr_enable(&args[2]),
+            "copr-disable" => copr_disable(&args[2]),
             "help" => get_help(),
             _ => {
                 println!("Unknown command: {}", command);

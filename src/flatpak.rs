@@ -2,11 +2,11 @@ use std::process::Command;
 
 pub fn flat_install(remote: &String, flatpak: &String) {
     if remote.is_empty() {
-        println!("Remote not provided.");
+        println!("Remote not provided");
     }
 
     if flatpak.is_empty() {
-        println!("Flatpak not provided.");
+        println!("Flatpak not provided");
     }
 
     let status = Command::new("sudo")
@@ -24,7 +24,7 @@ pub fn flat_install(remote: &String, flatpak: &String) {
             println!("\nOperation canceled by the user.");
         }
         Ok(_) => {
-            println!("\nError installing packages");
+            println!("\nError installing Flatpak: {}", flatpak);
         }
         Err(e) => {
             println!("\nFailed to execute command: {}", e);
@@ -48,10 +48,10 @@ pub fn flat_remove(flatpak: &String) {
             println!("\nFlatpak removed successfully");
         }
         Ok(exit_status) if exit_status.code() == Some(1) => {
-            println!("\nOperation canceled by the user.");
+            println!("\nOperation canceled by the user");
         }
         Ok(_) => {
-            println!("\nError removing Flatpak");
+            println!("\nError removing Flatpak: {}", flatpak);
         }
         Err(e) => {
             println!("\nFailed to execute command: {}", e);
@@ -67,7 +67,7 @@ pub fn flat_update() {
             println!("\nFlatpaks updated successfully");
         }
         Ok(exit_status) if exit_status.code() == Some(1) => {
-            println!("\nOperation canceled by the user.");
+            println!("\nOperation canceled by the user");
         }
         Ok(_) => {
             println!("\nError updating Flatpaks");
