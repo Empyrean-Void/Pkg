@@ -2,7 +2,7 @@ use dnf::{
     auto_remove, check_update, downgrade_packages, install_packages, list_installed,
     remove_packages, search_package, update_system,
 };
-use flatpak::{flat_install, flat_remove};
+use flatpak::{flat_install, flat_remove, flat_update};
 use std::env;
 
 mod dnf;
@@ -36,6 +36,8 @@ fn get_help() {
     update - Updates the system
     Ex: pkg update
 
+    fupdate - Updates Flatpaks
+
     downgrade - Downgrade packages
     Ex: pkg downgrade git htop
 
@@ -63,6 +65,7 @@ fn main() {
             "auto-remove" => auto_remove(),
             "check" => check_update(),
             "update" => update_system(),
+            "fupdate" => flat_update(),
             "downgrade" => downgrade_packages(&args[2..]),
             "list" => list_installed(),
             "search" => search_package(&args[2]),
