@@ -10,53 +10,27 @@ mod copr;
 mod dnf;
 mod flatpak;
 
+fn pkg_update() {
+    println!("I'm not ready yet!");
+}
+
 fn get_help() {
-    println!(
-        "
-    Pkg a Fedora package management tool
-
-    Usage: pkg <option>
-
-    Options:
-
-    install - Install packages
-    Ex: pkg install git htop
-
-    finstall - Install a Flatpak
-
-    remove - Remove packages
-    Ex: pkg remove git htop
-
-    fremove - Remove a Flatpak
-
-    auto-remove - Auto remove unused packages
-    Ex: pkg auto-remove
-
-    check - Checks for available updates
-    Ex: pkg check
-
-    update - Updates the system
-    Ex: pkg update
-
-    fupdate - Updates Flatpaks
-
-    downgrade - Downgrade packages
-    Ex: pkg downgrade git htop
-
-    list - List installed packages
-    Ex: pkg list
-
-    search - Search for a package
-    Ex: pkg search git
-
-    copr-enable - Enable a COPR repositoy
-
-    copr-disable - Disable a COPR repositoy
-
-    help - Display this message
-    Ex: pkg help
-    "
-    )
+    println!("\nUsage: pkg [arg [...]]");
+    println!("\nArguments:\n");
+    println!("  help           - Show this message\n");
+    println!("  install        - Install a package or packages");
+    println!("  remove         - Remove a package or packages");
+    println!("  auto-remove    - Remove unused packages");
+    println!("  check          - Check for updates");
+    println!("  update         - Update the system");
+    println!("  downgrade      - Downgrade a package or packages");
+    println!("  list           - List installed packages");
+    println!("  search         - Search for a package\n");
+    println!("  finstall       - Install a Flatpak");
+    println!("  fremove        - Remove a Flatpak");
+    println!("  fupdate        - Update a Flatpak\n");
+    println!("  copr-enable    - Enable a COPR repository");
+    println!("  copr-disable   - Disable a COPR repository\n");
 }
 
 fn main() {
@@ -64,6 +38,7 @@ fn main() {
 
     match args.get(1) {
         Some(command) => match command.as_str() {
+            "pkg-update" => pkg_update(),
             "install" => install_packages(&args[2..]),
             "finstall" => flat_install(&args[2], &args[3]),
             "remove" => remove_packages(&args[2..]),
